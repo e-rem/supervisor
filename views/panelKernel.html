@@ -1,13 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<body class="container">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<main>
-		<div id="contenttemperature">
-			<h3>Température</h3>
-			<p><span id="spantemp"><%= temp %></span>&nbsp;<span id="spanlastread"><%= lastread %></span></p>
-		</div>
-	</main>
-	
+<head>
+    <link rel="stylesheet" href="bootstrap\css\bootstrap.min.css">
+    <link rel="stylesheet" href="AdminLTE\css\AdminLTE.min.css">
+    <link rel="stylesheet" href="font-awesome\css\font-awesome.min.css">
+</head>
+
+<body>
+    <script type="text/javascript" src="bootstrap\js\bootstrap.min.js"></script>
+    <script type="text/javascript" src="AdminLTE\js\AdminLTE.min.js"></script>
+    <main>
+        <div id="contenttemperature">
+            <!-- <div class="row">
+                <span>Température</span>
+            </div>
+            <div class="row">
+                <span id="spantemp">
+                    <%= temp %>
+                </span>&nbsp;
+                <span id="spanlastread">
+                    <%= lastread %>
+                </span>
+            </div> -->
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-aqua">
+                        <i class="fa fa-thermometer-quarter"></i>
+                    </span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Le Kern - Cuisine</span>
+                        <span class="info-box-number">
+                            <%= temp %>
+                        </span>
+                        <span class="info-box-date">
+                            <%= lastread %>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            </p>
+        </div>
+    </main>
+
 </body>
+
 </html>

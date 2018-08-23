@@ -3,9 +3,15 @@ var express = require('express'),
   app = express(),
   morgan = require('morgan');
 
+var redisSettings = {}
+redisSettings.adress = process.env.REDIS_ADRESS
+redisSettings.password = process.env.REDIS_PASSWORD
 var options = {
-  url: "redis://:qEXfQ9ml0FlvFwvaFQeplSSj8jnhqqPl@redis-16488.c14.us-east-1-3.ec2.cloud.redislabs.com:16488"
+  url: "redis://:" + redisSettings.password + "@" + redisSettings.adress
 }
+// var options = {
+//   url: "redis://:qEXfQ9ml0FlvFwvaFQeplSSj8jnhqqPl@redis-16488.c14.us-east-1-3.ec2.cloud.redislabs.com:16488"
+// }
 
 var clientId = "lekern"
 
@@ -22,6 +28,7 @@ Object.assign = require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
+app.use(express.static('public'));
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
