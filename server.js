@@ -9,9 +9,7 @@ redisSettings.password = process.env.REDIS_PASSWORD
 var options = {
   url: "redis://:" + redisSettings.password + "@" + redisSettings.adress
 }
-// var options = {
-//   url: "redis://:qEXfQ9ml0FlvFwvaFQeplSSj8jnhqqPl@redis-16488.c14.us-east-1-3.ec2.cloud.redislabs.com:16488"
-// }
+
 
 var clientId = "lekern"
 
