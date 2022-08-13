@@ -87,7 +87,7 @@ app.get('/', function (req, res) {
     if (rvalue != null) {
       var data = JSON.parse(rvalue);
       console.log(data);
-      res.render('panelKernel.html', { temp: data.temp, lastread: data.lastupdate,ippublic : data.ippublic  });
+      res.render('panelKernel.html', { temp: data.temp, lastread: data.lastupdate,ippublic : data.ippublic   });
 
     }
     else {
