@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const helmet = require('helmet');
+//const helmet = require('helmet');
 const morgan = require('morgan');
 
 var readvalue = null;
@@ -31,7 +31,7 @@ client.on("error", function (err) {
 Object.assign = require('object-assign')
 
 // adding Helmet to enhance your Rest API's security
-app.use(helmet());
+//app.use(helmet());
 
 // using bodyParser to parse JSON bodies into JS objects
 app.use(bodyParser.json());
