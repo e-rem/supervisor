@@ -1,9 +1,13 @@
-//  OpenShift sample Node application
-var express = require('express'),
-  app = express(),
-  morgan = require('morgan');
 
-var oldvalue = null;
+
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+
+var readvalue = null;
 
 var redisSettings = {}
 redisSettings.adress = process.env.REDIS_ADRESS
@@ -26,8 +30,19 @@ client.on("error", function (err) {
 
 Object.assign = require('object-assign')
 
+// adding Helmet to enhance your Rest API's security
+app.use(helmet());
+
+// using bodyParser to parse JSON bodies into JS objects
+app.use(bodyParser.json());
+
+// enabling CORS for all requests
+app.use(cors());
+
+// adding morgan to log HTTP requests
+app.use(morgan('combined'));
+
 app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
 app.use(express.static('public'));
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
@@ -78,20 +93,15 @@ var initDb = function (callback) {
   });
 };
 
+app.post('/temperature', (req, res) => {
+  readvalue = req.body;
+  console.log("read value");
+  console.log(readvalue);
+  client.set(clientId, readvalue);
+  res.sendStatus(200);
+})
+
 app.get('/', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  // if (!db) {
-  //   initDb(function (err) { });
-  // }
-
-  if (oldvalue != null) {
-    console.log( new Date());
-    console.log("old value:");
-    console.log(oldvalue);
-  }
-
-  oldvalue = new Date();
 
 
   client.get(clientId, function (err, rvalue) {
@@ -99,8 +109,6 @@ app.get('/', function (req, res) {
       var data = JSON.parse(rvalue);
       console.log(data);
       res.render('panelKernel.html', { temp: data.temp, lastread: data.lastupdate, ippublic: data.ippublic });
-      
-     
 
 
     }
