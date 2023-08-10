@@ -3,6 +3,8 @@ var express = require('express'),
   app = express(),
   morgan = require('morgan');
 
+var oldvalue = null;
+
 var redisSettings = {}
 redisSettings.adress = process.env.REDIS_ADRESS
 redisSettings.password = process.env.REDIS_PASSWORD
@@ -83,11 +85,23 @@ app.get('/', function (req, res) {
   //   initDb(function (err) { });
   // }
 
+  if (oldvalue != null) {
+    console.log( new Date());
+    console.log("old value:");
+    console.log(oldvalue);
+  }
+
+  oldvalue = new Date();
+
+
   client.get(clientId, function (err, rvalue) {
     if (rvalue != null) {
       var data = JSON.parse(rvalue);
       console.log(data);
-      res.render('panelKernel.html', { temp: data.temp, lastread: data.lastupdate,ippublic : data.ippublic   });
+      res.render('panelKernel.html', { temp: data.temp, lastread: data.lastupdate, ippublic: data.ippublic });
+      
+     
+
 
     }
     else {
