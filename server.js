@@ -59,7 +59,7 @@ app.post('/temperature', async (req, res) => {
     await client.set(clientId, readvalue);
 
   } catch (error) {
-    console.log(readvalue);
+    console.log(error);
     hasError = true;
   }
 
