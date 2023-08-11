@@ -56,7 +56,7 @@ app.post('/temperature', async (req, res) => {
     if (!client.isOpen) {
       await client.connect();
     }
-    await client.set(clientId, readvalue);
+    await client.set(clientId, JSON.stringify(readvalue));
 
   } catch (error) {
     console.log(error);
