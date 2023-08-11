@@ -10,8 +10,8 @@ const morgan = require('morgan');
 var readvalue = null;
 
 var redisSettings = {}
-redisSettings.adress = process.env.REDIS_ADRESS
-redisSettings.password = process.env.REDIS_PASSWORD
+redisSettings.adress = process.env.REDIS_ADRESS;
+redisSettings.password = process.env.REDIS_PASSWORD;
 var options = {
   url: "redis://:" + redisSettings.password + "@" + redisSettings.adress
 }
@@ -23,10 +23,6 @@ var redis = require("redis"),
   client = redis.createClient(options);
 
 
-
-client.on("error", function (err) {
-  console.log("Error " + err);
-});
 
 Object.assign = require('object-assign')
 
@@ -48,20 +44,46 @@ app.use(express.static('public'));
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
-  
 
-app.post('/temperature', (req, res) => {
+
+app.post('/temperature', async (req, res) => {
   readvalue = req.body;
+  var hasError = false;
+
   console.log("read value");
   console.log(readvalue);
-  client.set(clientId, readvalue);
-  res.sendStatus(200);
+  try {
+    if (!client.isOpen) {
+      await client.connect();
+    }
+    await client.set(clientId, readvalue);
+
+  } catch (error) {
+    console.log(readvalue);
+    hasError = true;
+  }
+
+  if (client.isOpen) {
+    await client.quit();
+  }
+
+  if (!hasError) {
+
+    res.sendStatus(200);
+  }
+  else
+    res.sendStatus(400);
 })
 
-app.get('/', function (req, res) {
+app.get('/', async (req, res) => {
 
+  var hasError = false;
+  try {
+    if (!client.isOpen) {
+      await client.connect();
+    }
 
-  client.get(clientId, function (err, rvalue) {
+    var rvalue = await client.get(clientId);
     if (rvalue != null) {
       var data = JSON.parse(rvalue);
       console.log(data);
@@ -70,11 +92,21 @@ app.get('/', function (req, res) {
 
     }
     else {
-      res.render('panelKernel.html', { temp: "error", lastread: "now" });
+      res.render('panelKernel.html', { temp: "error", lastread: "now", ippublic: "" });
     }
-  })
 
 
+  } catch (error) {
+    console.log(error);
+    hasError = true;
+    res.render('panelKernel.html', { temp: "error", lastread: "now", ippublic: "" });
+
+  }
+
+
+
+  if (client.isOpen )
+    await client.quit();
 
 });
 
