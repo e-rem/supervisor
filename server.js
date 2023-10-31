@@ -12,8 +12,17 @@ var readvalue = null;
 var redisSettings = {}
 redisSettings.adress = process.env.REDIS_ADRESS;
 redisSettings.password = process.env.REDIS_PASSWORD;
+redisSettings.internalurl = process.env.REDIS_INTERNALURL;
 var options = {
   url: "redis://:" + redisSettings.password + "@" + redisSettings.adress
+}
+
+if(redisSettings.internalurl)
+{
+  options = {
+    url: redisSettings.internalurl
+  }
+  console.log("internal redis");
 }
 
 
